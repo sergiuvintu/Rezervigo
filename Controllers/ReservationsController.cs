@@ -64,9 +64,8 @@ namespace Rezervigo.Controllers
             if (DateTime.TryParseExact(checking_in, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkin) && DateTime.TryParseExact(checking_out, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkout))
             {
                 var occupied = db.Reservations.Where(b => (b.Checkin >= date_checkin) && (b.Checkout <= date_checkout) && (b.Room_Id == room_id)).FirstOrDefault();
-                if (sql != null)
+                if (occupied != null)
                 {
-                    ViewBag.sql = sql;
                     ModelState.AddModelError("", "The room is already booked for the period selected.Please select another time window and try again.");
                 }
                 else
