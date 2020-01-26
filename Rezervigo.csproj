@@ -179,37 +179,12 @@
     <Compile Include="Controllers\ReservationsController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="DAL\DataContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001241617114_updated models with validations.cs" />
-    <Compile Include="Migrations\202001241617114_updated models with validations.designer.cs">
-      <DependentUpon>202001241617114_updated models with validations.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001251032133_validation final.cs" />
-    <Compile Include="Migrations\202001251032133_validation final.designer.cs">
-      <DependentUpon>202001251032133_validation final.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001251623178_final update for foreign.cs" />
-    <Compile Include="Migrations\202001251623178_final update for foreign.designer.cs">
-      <DependentUpon>202001251623178_final update for foreign.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001251656020_test.cs" />
-    <Compile Include="Migrations\202001251656020_test.designer.cs">
-      <DependentUpon>202001251656020_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001251813438_test1.cs" />
-    <Compile Include="Migrations\202001251813438_test1.designer.cs">
-      <DependentUpon>202001251813438_test1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001251949025_test2.cs" />
-    <Compile Include="Migrations\202001251949025_test2.designer.cs">
-      <DependentUpon>202001251949025_test2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001261003293_test3.cs" />
-    <Compile Include="Migrations\202001261003293_test3.designer.cs">
-      <DependentUpon>202001261003293_test3.cs</DependentUpon>
+    <Compile Include="Migrations\202001261200579_initial migration.cs" />
+    <Compile Include="Migrations\202001261200579_initial migration.designer.cs">
+      <DependentUpon>202001261200579_initial migration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -298,6 +273,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
+    <Folder Include="Views\Users2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -324,26 +300,8 @@
     <Analyzer Include="packages\Microsoft.NetFramework.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.NetFramework.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001241617114_updated models with validations.resx">
-      <DependentUpon>202001241617114_updated models with validations.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001251032133_validation final.resx">
-      <DependentUpon>202001251032133_validation final.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001251623178_final update for foreign.resx">
-      <DependentUpon>202001251623178_final update for foreign.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001251656020_test.resx">
-      <DependentUpon>202001251656020_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001251813438_test1.resx">
-      <DependentUpon>202001251813438_test1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001251949025_test2.resx">
-      <DependentUpon>202001251949025_test2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001261003293_test3.resx">
-      <DependentUpon>202001261003293_test3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001261200579_initial migration.resx">
+      <DependentUpon>202001261200579_initial migration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

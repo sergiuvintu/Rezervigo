@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Rezervigo.DAL;
 using Rezervigo.Models;
 using System.Diagnostics;
 
@@ -15,7 +14,7 @@ namespace Rezervigo.Controllers
 {
     public class ReservationsController : Controller
     {
-        private DataContext db = new DataContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Reservations
         [Authorize]
