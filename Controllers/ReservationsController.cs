@@ -57,36 +57,33 @@ namespace Rezervigo.Controllers
             string checking_in = Request["Checkin"];   
             string checking_out = Request["Checkin"];
             int room_id = Convert.ToInt32(Request["Room_Id"]);
-            int user_id = Convert.ToInt32(Request["User_Id"]);
-            DateTime date_checkin;
-            DateTime date_checkout;
-            if (DateTime.TryParseExact(checking_in, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkin) && DateTime.TryParseExact(checking_out, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkout))
+            DateTime date_checkin = DateTime.Parse(checking_in, null, System.Globalization.DateTimeStyles.RoundtripKind);
+            DateTime date_checkout = DateTime.Parse(checking_out, null, System.Globalization.DateTimeStyles.RoundtripKind);
+
+            var occupied = db.Reservations.Where(b => ((b.checkin > date_checkin) && (b.checkin > date_checkout))|| ((b.Checkout < date_checkout) && (b.Checkout < date_checkin)) || ((b.checkin == date_checkin) && (b.Checkout == date_checkout)) && (b.Room_Id == room_id)).FirstOrDefault();
+            if (occupied != null)
             {
-                var occupied = db.Reservations.Where(b => (b.Checkin >= date_checkin) && (b.Checkout <= date_checkout) && (b.Room_Id == room_id)).FirstOrDefault();
-                if (occupied != null)
+                ModelState.AddModelError("", "The room is already booked for the period selected.Please select another time window and try again.");
+            }
+            else
+            {
+                if (date_checkin < DateTime.Today)
                 {
-                    ModelState.AddModelError("", "The room is already booked for the period selected.Please select another time window and try again.");
+                    ModelState.AddModelError("", "You can not checkin in the past.Please select another time window and try again.");
                 }
-                else
+                else if (date_checkout < DateTime.Today)
                 {
-                    if (date_checkin < DateTime.Today)
-                    {
-                        ModelState.AddModelError("", "You can not checkin in the past.Please select another time window and try again.");
-                    }
-                    else if (date_checkout < DateTime.Today)
-                    {
-                        ModelState.AddModelError("", "You can not checkout in the past.Please select another time window and try again.");
-                    }
-                    else if (date_checkout < date_checkin)
-                    {
-                        ModelState.AddModelError("", "You can not checkout before checking in.Please select another time window and try again.");
-                    }
-                    else if (ModelState.IsValid)
-                    {
-                        db.Reservations.Add(reservation);
-                        await db.SaveChangesAsync();
-                        return RedirectToAction("Index");
-                    }
+                    ModelState.AddModelError("", "You can not checkout in the past.Please select another time window and try again.");
+                }
+                else if (date_checkout < date_checkin)
+                {
+                    ModelState.AddModelError("", "You can not checkout before checking in.Please select another time window and try again.");
+                }
+                else if (ModelState.IsValid)
+                {
+                    db.Reservations.Add(reservation);
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
             }   
             PopulateUsersDropDownList();
@@ -106,8 +103,8 @@ namespace Rezervigo.Controllers
             {
                 return HttpNotFound();
             }
-            PopulateUsersDropDownList(reservation.User);
-            PopulateRoomsDropDownList(reservation.Room);
+            PopulateUsersDropDownList(reservation.User_Id);
+            PopulateRoomsDropDownList(reservation.Room_Id);
             return View(reservation);
         }
 
@@ -127,7 +124,7 @@ namespace Rezervigo.Controllers
             DateTime date_checkout;
             if (DateTime.TryParseExact(checking_in, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkin) && DateTime.TryParseExact(checking_out, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkout))
             {
-                var occupied = db.Reservations.Where(b => (b.Checkin >= date_checkin) && (b.Checkout <= date_checkout) && (b.Room_Id == room_id)).FirstOrDefault();
+                var occupied = db.Reservations.Where(b => (b.checkin >= date_checkin) && (b.Checkout <= date_checkout) && (b.Room_Id == room_id)).FirstOrDefault();
                 if (occupied != null)
                 {
                     ModelState.AddModelError("", "The room is already booked for the period selected.Please select another time window and try again.");
@@ -154,8 +151,8 @@ namespace Rezervigo.Controllers
                     }
                 }
             }
-            PopulateUsersDropDownList(reservation.User);
-            PopulateRoomsDropDownList(reservation.Room);
+            PopulateUsersDropDownList(reservation.User_Id);
+            PopulateRoomsDropDownList(reservation.Room_Id);
             return View(reservation);
         }
         [Authorize]

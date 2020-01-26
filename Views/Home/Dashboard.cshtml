@@ -11,22 +11,35 @@
     @Scripts.Render("~/fullcalendar-js")
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            var reservations = [];
+             $.ajax({
+                url: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Url.Action("ReservationsFeed", "Home", null, Request.Url.Scheme)) as String),
+                cache: false,
+                async: false,
+                success: function(response){
+                    if(response)
+                    {
+                        response.forEach(function (reservation) {
+                            result = [];
+                            result['title'] = reservation.User.Name + ' in Room ' +reservation.Room.Number;
+                            result['start'] = reservation.FormattedCheckinDate;
+                            result['end'] = reservation.FormattedCheckoutDate;
+                            reservations.push(result);
+                        });                     
+                    }
+                }
+            });
             var calendarEl = document.getElementById('calendar');
-
+            console.log(reservations);
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 plugins: ['interaction', 'dayGrid', 'timeGrid'],
                 defaultView: 'dayGridMonth',
-                defaultDate: '2019-11-07',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                events: [
-                    {
-                        
-                    },
-                ]
+                 events : reservations,
             });
 
             calendar.render();
