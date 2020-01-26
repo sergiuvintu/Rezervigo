@@ -120,11 +120,40 @@ namespace Rezervigo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Checkin,Checkout,User,Room")] Reservation reservation)
         {
-            if (ModelState.IsValid)
+            string checking_in = Request["Checkin"];
+            string checking_out = Request["Checkin"];
+            int room_id = Convert.ToInt32(Request["Room_Id"]);
+            int user_id = Convert.ToInt32(Request["User_Id"]);
+            DateTime date_checkin;
+            DateTime date_checkout;
+            if (DateTime.TryParseExact(checking_in, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkin) && DateTime.TryParseExact(checking_out, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out date_checkout))
             {
-                db.Entry(reservation).State = EntityState.Modified;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var occupied = db.Reservations.Where(b => (b.Checkin >= date_checkin) && (b.Checkout <= date_checkout) && (b.Room_Id == room_id)).FirstOrDefault();
+                if (occupied != null)
+                {
+                    ModelState.AddModelError("", "The room is already booked for the period selected.Please select another time window and try again.");
+                }
+                else
+                {
+                    if (date_checkin < DateTime.Today)
+                    {
+                        ModelState.AddModelError("", "You can not checkin in the past.Please select another time window and try again.");
+                    }
+                    else if (date_checkout < DateTime.Today)
+                    {
+                        ModelState.AddModelError("", "You can not checkout in the past.Please select another time window and try again.");
+                    }
+                    else if (date_checkout < date_checkin)
+                    {
+                        ModelState.AddModelError("", "You can not checkout before checking in.Please select another time window and try again.");
+                    }
+                    else if (ModelState.IsValid)
+                    {
+                        db.Entry(reservation).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+                }
             }
             PopulateUsersDropDownList(reservation.User);
             PopulateRoomsDropDownList(reservation.Room);
