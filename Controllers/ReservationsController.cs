@@ -55,7 +55,7 @@ namespace Rezervigo.Controllers
         public async Task<ActionResult> Create([Bind(Include = "Id,Checkin,Checkout,User_Id,Room_Id")] Reservation reservation)
         {
             string checking_in = Request["Checkin"];   
-            string checking_out = Request["Checkin"];
+            string checking_out = Request["Checkout"];
             int room_id = Convert.ToInt32(Request["Room_Id"]);
             DateTime date_checkin = DateTime.Parse(checking_in, null, System.Globalization.DateTimeStyles.RoundtripKind);
             DateTime date_checkout = DateTime.Parse(checking_out, null, System.Globalization.DateTimeStyles.RoundtripKind);
@@ -114,10 +114,10 @@ namespace Rezervigo.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Checkin,Checkout,User,Room")] Reservation reservation)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Checkin,Checkout,User_Id,Room_Id")] Reservation reservation)
         {
             string checking_in = Request["Checkin"];
-            string checking_out = Request["Checkin"];
+            string checking_out = Request["Checkout"];
             int room_id = Convert.ToInt32(Request["Room_Id"]);
             int user_id = Convert.ToInt32(Request["User_Id"]);
             DateTime date_checkin;
